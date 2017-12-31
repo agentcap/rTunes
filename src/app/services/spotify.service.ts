@@ -12,8 +12,9 @@ export class SpotifyService{
 	private countryUrl: string;
 	private tagUrl: string;
 	private tagArtistsUrl: string;
-
-
+	private topArtistUrl:string;
+	private topTracksUrl:string;
+	private trackChartUrl: string;
 	apiToken = environment.apiToken;
 
 	constructor(private _http:Http){}
@@ -27,6 +28,11 @@ export class SpotifyService{
 		return this._http.get(this.artistUrl).map(res => res.json());
 	}
 
+	searchAlbum(str: string, limit: number){
+		this.searchUrl = 'http://ws.audioscrobbler.com/2.0/?method=album.search&album='+str+'&api_key='+this.apiToken+'&format=json&limit='+limit;
+		return this._http.get(this.searchUrl).map(res => res.json());
+	}
+
 	getAlbums(name: string, limit: number){
 		this.albumsUrl = 'http://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&artist='+name+'&api_key='+this.apiToken+'&format=json&limit='+limit;
 		return this._http.get(this.albumsUrl).map(res => res.json());
@@ -35,6 +41,11 @@ export class SpotifyService{
 	getAlbumInfo(mbid: string){
 		this.albumUrl = 'http://ws.audioscrobbler.com/2.0/?method=album.getinfo&mbid='+mbid+'&api_key='+this.apiToken+'&format=json';
 		return this._http.get(this.albumUrl).map(res => res.json());
+	}
+
+	searchTrack(str: string, limit: number){
+		this.searchUrl = 'http://ws.audioscrobbler.com/2.0/?method=track.search&track='+str+'&api_key='+this.apiToken+'&format=json&limit='+limit;
+		return this._http.get(this.searchUrl).map(res => res.json());
 	}
   
 	searchCountry(country: string){
@@ -58,4 +69,28 @@ export class SpotifyService{
 
 		return this._http.get(this.tagArtistsUrl).map(res => res.json());
 	}
+
+	 getTopArtists(country:string){
+    
+    this.topArtistUrl = 'http://ws.audioscrobbler.com/2.0/?method=geo.gettopartists&country='+ country +'&api_key='+this.apiToken+'&format=json&limit=15';
+    
+    return this._http.get(this.topArtistUrl).map(res => res.json());
+
+  }
+
+   getTopTracks(country:string){
+    
+    this.topTracksUrl = 'http://ws.audioscrobbler.com/2.0/?method=geo.gettoptracks&country='+ country +'&api_key='+this.apiToken+'&format=json&limit=15';
+    
+    return this._http.get(this.topTracksUrl).map(res => res.json());
+
+  }
+
+  getTrackChart(){
+
+  	this.trackChartUrl= 'http://ws.audioscrobbler.com/2.0/?method=chart.gettoptracks&api_key='+this.apiToken+'&format=json&limit=10';
+
+  	return this._http.get(this.trackChartUrl).map(res => res.json());
+  }
+
 }
