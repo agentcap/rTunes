@@ -53,7 +53,9 @@ export class SearchComponent {
 		if(this.searchQuery != undefined && this.searchQuery != '')
 		{
 			this._spotifyService.searchAlbum(this.searchQuery,200).subscribe(res => {
-				this.searchRes = res.results.albummatches.album;
+				this.searchRes = res.results.albummatches.album.filter(function (album:any) {
+					return album.mbid;
+				});
 				this.setPage(1);
 			})
 		}
